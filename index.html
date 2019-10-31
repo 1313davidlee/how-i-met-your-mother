@@ -117,7 +117,7 @@
     }
 
     .bar {
-        fill: steelblue;
+        fill: lightslategray;
         fill-opacity: .9;
     }
 
@@ -130,46 +130,57 @@
 		font-size: 30px;
 		font-weight: 900;
 	}
+	
+	.introMaterial{
+
+	}
 
 
 </style>
 <body>
-	<div class='titleHeader'>How I Met Your Mother (or Father)</div>
-	<div class='subTitle'>How people like you met their partner</div>
-	<div>I am a 
-		<select>
-			<option>Man</option>
-			<option>Woman</option>
-			<option>Other</option>
-		</select>
-		 born in the
-		 <select>
-			 <option>1950s</option>
-			 <option>1960s</option>
-			 <option>1970s</option>
-			 <option>1980s</option>
-		 </select>. I make
-		 <select>
-			 <option>50k</option>
-			 <option>80k</option>
-			 <option>100k</option>
-			 <option>150k</option>
-		 </select> per year and identify as
-		 <select>
-			<option style='font-weight: bold' value="" selected disabled hidden>Race</option>
-			 <option>White</option>
-			 <option>Black</option>
-			 <option>Asian</option>
-			 <option>Native American</option>
-			 <option>Asian</option>
-			 <option>Asian</option>
-		 </select>.  My highest level of education is
-		<select>
-			<option>less than a high school degree</option>
-			<option>a high school degree</option>
-			<option>a college degree</option>
-			<option>a masters degree</option>
-		</select>.</div>
+	<div class='introMaterial'>
+			<div class='titleHeader'>How I Met Your Mother (or Father)</div>
+			<div class='subTitle'>How people like you met their partner</div>
+			<div>I am a 
+				<select id='inputAge'>
+					<option value='18-24'>18-24</option>
+					<option value='25-34'>25-34</option>
+					<option value='35-44'>35-44</option>
+					<option value='45-54'>45-54</option>
+					<option value='55-64'>55-64</option>
+					<option value='65+'>65+</option>
+				</select>
+				year old
+				<select id='inputGender'>
+					<option value='Male'>Man</option>
+					<option value='Female'>Woman</option>
+					<option value='Other'>Other</option>
+				</select>
+				 living in the
+				 <select id='inputRegion'>
+					 <option value='Midwest'>Midwest</option>
+					 <option value='West'>West</option>
+					 <option value='South'>South</option>
+					 <option value='Northeast'>Northeast</option>
+				 </select>.
+				 I identify as 
+				 <select id='inputRace'>
+					<option style='font-weight: bold' value="" selected disabled hidden>Race</option>
+					 <option value='white'>White</option>
+					 <option value='black'>Black</option>
+					 <option value='asian'>Asian</option>
+					 <option value='native_am'>Native American</option>
+					 <option value='hispanic'>Hispanic</option>
+					 <option value='multiracial'>Multiracial</option>
+				 </select> and my highest level of education is
+				<select id='inputEdu'>
+					<option value='less_hs'>less than a high school degree</option>
+					<option value='high_school'>a high school degree</option>
+					<option value='some_college'>some college degree</option>
+					<option value='bachelor_up'>a bachelor's degree or higher</option>
+				</select>.</div>
+	</div>
+	
 <form>
     <label><input type="radio" name="dataset" id="dataset" value="total" checked> Total</label>
     <label><input type="radio" name="dataset" id="dataset" value="option1"> Option 1</label>
@@ -178,13 +189,23 @@
 <script src="https://d3js.org/d3.v3.min.js"></script>
 <script>
 
+	relationship_data = d3.csv("./relationship_data_clean.csv")
+
     datasetTotal = [
-        {label:"Category 1", value:19},
-        {label:"Category 2", value:5},
-        {label:"Category 3", value:13},
-        {label:"Category 4", value:17},
-        {label:"Category 5", value:21},
-        {label:"Category 6", value:25}
+		{label:"Other", value:25},
+		{label:"Internet or App", value:21},
+		{label:"Blind Date", value:17},
+        {label:"Work", value:19},
+        {label:"Friend", value:5},
+        {label:"Family", value:13},
+        {label:"Neighbor", value:17},
+        {label:"School", value:21},
+        {label:"Church", value:25},
+		{label:"Volunteering", value:19},
+        {label:"Social Event or Bar", value:5},
+        {label:"Stranger", value:13},
+        
+        
     ];
 
     datasetOption1 = [
@@ -206,6 +227,32 @@
     ];
 
     d3.selectAll("input").on("change", selectDataset);
+
+	d3.selectAll("select").on("change", defineParams);
+
+	function defineParams(){
+		var age = document.getElementById('inputAge')
+		var gender = document.getElementById('inputGender')
+		var region = document.getElementById('inputRegion')
+		var race = document.getElementById('inputRace')
+		var edu = document.getElementById('inputEdu')
+
+		var age_value = age.options[age.selectedIndex].value;
+		var gender_value = gender.options[gender.selectedIndex].value;
+		var region_value = region.options[region.selectedIndex].value;
+		var race_value = race.options[race.selectedIndex].value;
+		var edu_value = edu.options[edu.selectedIndex].value;
+
+		resetData(age_value, gender_value, region_value, race_value, edu_value)
+
+		console.log(
+			 age_value,
+			 gender_value,
+			 region_value,
+			 race_value,
+			 edu_value
+		)
+	}
 
     function selectDataset()
     {
@@ -261,6 +308,10 @@
 
     d3.select("input[value=\"total\"]").property("checked", true);
     change(datasetTotal);
+
+	function resetData(age, gender, region, race, edu){
+
+	}
 
     function change(dataset) {
 
