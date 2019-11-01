@@ -117,7 +117,7 @@
     }
 
     .bar {
-        fill: lightslategray;
+        fill: royalblue;
         fill-opacity: .9;
     }
 
@@ -189,7 +189,7 @@
 <script src="https://d3js.org/d3.v3.min.js"></script>
 <script>
 
-	relationship_data = d3.csv("./relationship_data_clean.csv")
+	var relationship_data = d3.csv("./relationship_data_clean.csv")
 
     datasetTotal = [
 		{label:"Other", value:25},
@@ -243,7 +243,7 @@
 		var race_value = race.options[race.selectedIndex].value;
 		var edu_value = edu.options[edu.selectedIndex].value;
 
-		resetData(age_value, gender_value, region_value, race_value, edu_value)
+		resetData(relationship_data, age_value, gender_value, region_value, race_value, edu_value)
 
 		console.log(
 			 age_value,
@@ -309,8 +309,14 @@
     d3.select("input[value=\"total\"]").property("checked", true);
     change(datasetTotal);
 
-	function resetData(age, gender, region, race, edu){
+	function resetData(dataset, age, gender, region, race, edu){
+		.data(dataset.filter(function(d){return d.age == age}))
+		.data(dataset.filter(function(d){return d.education == edu}))
+		.data(dataset.filter(function(d){return d.gender == gender}))
+		.data(dataset.filter(function(d){return d.race == race }))
+		.data(dataset.filter(function(d){return d.region == region}))
 
+		console.log('DATASET', dataset)
 	}
 
     function change(dataset) {
