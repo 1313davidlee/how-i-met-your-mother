@@ -121,11 +121,6 @@
 					<option value='baby_boomer_up'>Baby Boomer or older</option>
 				</select>
 				year old
-				<select id='inputGender'>
-					<option value='male'>Man</option>
-					<option value='female'>Woman</option>
-					<option value='other'>Other</option>
-				</select>
 				 living in the
 				 <select id='inputRegion'>
 					 <option value='midwest'>Midwest</option>
@@ -153,21 +148,19 @@
        relationship_data = data;
        console.log(relationship_data)
     })
-    datasetTotal = [
-		{label:"Other", value:25},
-		{label:"Internet or App", value:21},
-		{label:"Blind Date", value:17},
-        {label:"Work", value:19},
-        {label:"Friend", value:5},
-        {label:"Family", value:13},
-        {label:"Neighbor", value:17},
-        {label:"School", value:21},
-        {label:"Church", value:25},
-		{label:"Volunteering", value:19},
-        {label:"Social Event or Bar", value:5},
-        {label:"Stranger", value:13},
-        
-        
+    defaultZeros = [
+		{label:"Other", value:0, percent:0},
+		{label:"Internet or App", value:0, percent:0},
+		{label:"Blind Date", value:0, percent:0},
+        {label:"Work", value:0, percent:0},
+        {label:"Friend", value:0, percent:0},
+        {label:"Family", value:0, percent:0},
+        {label:"Neighbor", value:0, percent:0},
+        {label:"School", value:0, percent:0},
+        {label:"Church", value:0, percent:0},
+		{label:"Volunteering", value:0, percent:0},
+        {label:"Social Event or Bar", value:0, percent:0},
+        {label:"Stranger", value:0, percent:0},
     ];
     datasetOption1 = [
         {label:"Category 1", value:22},
@@ -189,31 +182,27 @@
 	d3.selectAll("select").on("change", defineParams);
 	function defineParams(){
 		var age = document.getElementById('inputAge')
-		var gender = document.getElementById('inputGender')
 		var region = document.getElementById('inputRegion')
 		var edu = document.getElementById('inputEdu')
 		var age_value = age.options[age.selectedIndex].value;
-		var gender_value = gender.options[gender.selectedIndex].value;
 		var region_value = region.options[region.selectedIndex].value;
 		var edu_value = edu.options[edu.selectedIndex].value;
-		resetData(relationship_data, age_value, gender_value, region_value, edu_value)
+		resetData(relationship_data, age_value, region_value, edu_value)
 		console.log(
 			 age_value,
-			 gender_value,
 			 region_value,
 			 edu_value
 		)
-        var filtered_data = filterData(age_value, gender_value, region_value,  edu_value)
+        var filtered_data = filterData(age_value,  region_value,  edu_value)
 	}
-    function filterData(age_value, gender_value, region_value, edu_value){
+    function filterData(age_value,  region_value, edu_value){
         var temp_data = relationship_data
             .filter(function(d) {return d.education == edu_value})
             .filter(function(d) {return d.age_range == age_value})
-            .filter(function(d) {return d.gender == gender_value})
             .filter(function(d) {return d.region == region_value})
-        // console.log("temp", temp_data)
+        console.log(temp_data.length);
 
-        var transformed_data = transformDataset(temp_data);
+        var transformed_data = transformDatasetPercentage(temp_data);
         
         change(transformed_data);
 
@@ -270,6 +259,58 @@
         return newDataInput;
     }
 
+    function transformDatasetPercentage(temp_data) {
+        var work_num = 0;
+        var volunteering_num = 0;
+        var blind_date_num = 0;
+        var church_num = 0;
+        var family_num = 0;
+        var friend_num = 0;
+        var internet_num = 0;
+        var neighbor_num = 0;
+        var other_num = 0;
+        var school_num = 0;
+        var social_event_num = 0;
+        var stranger_num = 0;
+        var totalcount = 0;
+        
+        for (var i = 0; i < temp_data.length; i++) {
+            var eachRow = temp_data[i];
+
+            work_num += parseInt(eachRow.work);
+            volunteering_num += parseInt(eachRow.volunteering);
+            blind_date_num += parseInt(eachRow.blind_date);
+            church_num += parseInt(eachRow.church);
+            family_num += parseInt(eachRow.family);
+            friend_num += parseInt(eachRow.friend);
+            internet_num += parseInt(eachRow.internet);
+            neighbor_num += parseInt(eachRow.neighbor);
+            other_num += parseInt(eachRow.other);
+            school_num += parseInt(eachRow.school);
+            social_event_num += parseInt(eachRow.social_event_bar);
+            stranger_num += parseInt(eachRow.stranger);
+        }
+
+        var totalcount = work_num + volunteering_num + blind_date_num + church_num + family_num + friend_num + internet_num + neighbor_num + other_num + school_num + social_event_num + stranger_num;
+
+        var newDataInput = [
+		{label:"Other", value: other_num, percent: other_num / totalcount},
+		{label:"Internet or App", value: internet_num, percent: internet_num / totalcount},
+		{label:"Blind Date", value: blind_date_num, percent: blind_date_num / totalcount},
+        {label:"Work", value: work_num, percent: work_num / totalcount},
+        {label:"Friend", value: friend_num, percent: friend_num / totalcount},
+        {label:"Family", value: family_num, percent: family_num / totalcount},
+        {label:"Neighbor", value: neighbor_num, percent: neighbor_num / totalcount},
+        {label:"School", value: school_num, percent: school_num / totalcount},
+        {label:"Church", value: church_num, percent: church_num / totalcount},
+		{label:"Volunteering", value: volunteering_num, percent: volunteering_num / totalcount},
+        {label:"Social Event or Bar", value: social_event_num, percent: social_event_num / totalcount},
+        {label:"Stranger", value: stranger_num, percent: stranger_num / totalcount},
+        ];
+
+        return newDataInput;
+    }
+
 
 
     function selectDataset()
@@ -277,15 +318,15 @@
         var value = this.value;
         if (value == "total")
         {
-            change(datasetTotal);
+            // change(defaultZeros);
         }
         else if (value == "option1")
         {
-            change(datasetOption1);
+            // change(datasetOption1);
         }
         else if (value == "option2")
         {
-            change(datasetOption2);
+            // change(datasetOption2);
         }
     }
     var margin = {top: (parseInt(d3.select('body').style('height'), 10)/20), right: (parseInt(d3.select('body').style('width'), 10)/20), bottom: (parseInt(d3.select('body').style('height'), 10)/20), left: (parseInt(d3.select('body').style('width'), 10)/5)},
@@ -315,18 +356,20 @@
             .attr("transform", "translate(0," + height + ")")
             .call(xAxis);
     d3.select("input[value=\"total\"]").property("checked", true);
-    change(datasetTotal);
-	function resetData(dataset, age, gender, region, race, edu){
+
+    change(defaultZeros);
+
+
+	function resetData(dataset, age,  region, race, edu){
 	/*	.data(dataset.filter(function(d){return d.age == age}))
 		.data(dataset.filter(function(d){return d.education == edu}))
-		.data(dataset.filter(function(d){return d.gender == gender}))
 		.data(dataset.filter(function(d){return d.race == race }))
 		.data(dataset.filter(function(d){return d.region == region}))
 		console.log('DATASET', dataset)*/
 	}
     function change(dataset) {
         y.domain(dataset.map(function(d) { return d.label; }));
-        x.domain([0, d3.max(dataset, function(d) { return d.value; })]);
+        x.domain([0, 0.5]);
         svg.append("g")
                 .attr("class", "x axis")
                 .attr("transform", "translate(0," + height + ")")
@@ -341,7 +384,7 @@
                 .attr("x", 50)
                 .attr("dx", ".1em")
                 .style("text-anchor", "end")
-                .text("Option %");
+                // .text("Option %");
         var bar = svg.selectAll(".bar")
                 .data(dataset, function(d) { return d.label; });
         // new data:
@@ -349,14 +392,14 @@
                 .attr("class", "bar")
                 .attr("x", function(d) { return x(d.value); })
                 .attr("y", function(d) { return y(d.label); })
-                .attr("width", function(d) { return width-x(d.value); })
+                .attr("width", function(d) { return width-x(d.percent); })
                 .attr("height", y.rangeBand());
         bar
                 .on("mousemove", function(d){
                     div.style("left", d3.event.pageX+10+"px");
                     div.style("top", d3.event.pageY-25+"px");
                     div.style("display", "inline-block");
-                    div.html((d.label)+"<br>"+(d.value)+"%");
+                    div.html((d.label)+"<br>"+(d.value) + " people"); // +"<br>" + (d.percent.toFixed(2)) + "%"
                 });
         bar
                 .on("mouseout", function(d){
@@ -369,9 +412,11 @@
                 .duration(750)
                 .attr("x", function(d) { return 0; })
                 .attr("y", function(d) { return y(d.label); })
-                .attr("width", function(d) { return x(d.value); })
+                .attr("width", function(d) { return x(d.percent); })
                 .attr("height", y.rangeBand());
     };
+
+    
     
 </script>
 </body>
