@@ -121,11 +121,6 @@
 					<option value='baby_boomer_up'>Baby Boomer or older</option>
 				</select>
 				year old
-				<select id='inputGender'>
-					<option value='male'>Man</option>
-					<option value='female'>Woman</option>
-					<option value='other'>Other</option>
-				</select>
 				 living in the
 				 <select id='inputRegion'>
 					 <option value='midwest'>Midwest</option>
@@ -189,27 +184,23 @@
 	d3.selectAll("select").on("change", defineParams);
 	function defineParams(){
 		var age = document.getElementById('inputAge')
-		var gender = document.getElementById('inputGender')
 		var region = document.getElementById('inputRegion')
 		var edu = document.getElementById('inputEdu')
 		var age_value = age.options[age.selectedIndex].value;
-		var gender_value = gender.options[gender.selectedIndex].value;
 		var region_value = region.options[region.selectedIndex].value;
 		var edu_value = edu.options[edu.selectedIndex].value;
-		resetData(relationship_data, age_value, gender_value, region_value, edu_value)
+		resetData(relationship_data, age_value, region_value, edu_value)
 		console.log(
 			 age_value,
-			 gender_value,
 			 region_value,
 			 edu_value
 		)
-        var filtered_data = filterData(age_value, gender_value, region_value,  edu_value)
+        var filtered_data = filterData(age_value,  region_value,  edu_value)
 	}
-    function filterData(age_value, gender_value, region_value, edu_value){
+    function filterData(age_value,  region_value, edu_value){
         var temp_data = relationship_data
             .filter(function(d) {return d.education == edu_value})
             .filter(function(d) {return d.age_range == age_value})
-            .filter(function(d) {return d.gender == gender_value})
             .filter(function(d) {return d.region == region_value})
         // console.log("temp", temp_data)
 
@@ -316,10 +307,9 @@
             .call(xAxis);
     d3.select("input[value=\"total\"]").property("checked", true);
     change(datasetTotal);
-	function resetData(dataset, age, gender, region, race, edu){
+	function resetData(dataset, age,  region, race, edu){
 	/*	.data(dataset.filter(function(d){return d.age == age}))
 		.data(dataset.filter(function(d){return d.education == edu}))
-		.data(dataset.filter(function(d){return d.gender == gender}))
 		.data(dataset.filter(function(d){return d.race == race }))
 		.data(dataset.filter(function(d){return d.region == region}))
 		console.log('DATASET', dataset)*/
