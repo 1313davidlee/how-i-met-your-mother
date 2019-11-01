@@ -1,4 +1,4 @@
-﻿age ,education,race,gender,region,work,friend,family,neighbor,school,church,volunteering,social_event_bar,stranger,blind_date,internet,other
+﻿age_range,education,race,gender,region,work,friend,family,neighbor,school,church,volunteering,social_event_bar,stranger,blind_date,internet,other
 55-64,bachelor_up,white,Female,Midwest,1,0,0,0,0,0,0,0,0,0,0,0
 45-54,bachelor_up,white,Male,South,0,0,0,0,0,0,0,1,0,0,1,0
 55-64,bachelor_up,white,Female,South,0,0,0,1,0,0,0,0,0,1,0,0

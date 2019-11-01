@@ -165,7 +165,6 @@
 				 </select>.
 				 I identify as 
 				 <select id='inputRace'>
-					<option style='font-weight: bold' value="" selected disabled hidden>Race</option>
 					 <option value='white'>White</option>
 					 <option value='black'>Black</option>
 					 <option value='asian'>Asian</option>
@@ -189,7 +188,11 @@
 <script src="https://d3js.org/d3.v3.min.js"></script>
 <script>
 
-	var relationship_data = d3.csv("./relationship_data_clean.csv")
+	var relationship_data;
+    d3.csv("./relationship_data_clean.csv", function(data){
+       relationship_data = data;
+       console.log(relationship_data)
+    })
 
     datasetTotal = [
 		{label:"Other", value:25},
@@ -252,7 +255,22 @@
 			 race_value,
 			 edu_value
 		)
+
+        var filtered_data = filterData(age_value, gender_value, region_value, race_value, edu_value)
 	}
+
+    function filterData(age_value, gender_value, region_value, race_value, edu_value){
+        var temp_data = relationship_data
+                            .filter(function(d){return d['age'] == age_value})
+                            //.filter(function(d){return d.education == edu})
+                            //.filter(function(d){return d.gender == gender})
+                            //.filter(function(d){return d.race == race })
+                            //.filter(function(d){return d.region == region})
+        console.log("temp", temp_data)
+        return 0
+
+        
+    }
 
     function selectDataset()
     {
@@ -378,5 +396,7 @@
                 .attr("height", y.rangeBand());
 
     };
+
+    
 </script>
 </body>
