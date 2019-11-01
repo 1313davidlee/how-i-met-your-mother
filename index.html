@@ -143,38 +143,26 @@
 			<div class='subTitle'>How people like you met their partner</div>
 			<div>I am a 
 				<select id='inputAge'>
-					<option value='18-24'>18-24</option>
-					<option value='25-34'>25-34</option>
-					<option value='35-44'>35-44</option>
-					<option value='45-54'>45-54</option>
-					<option value='55-64'>55-64</option>
-					<option value='65+'>65+</option>
+					<option value='millennial'>Millennial</option>
+					<option value='gen_x'>Gen X</option>
+					<option value='baby_boomer_up'>Baby Boomer or older</option>
 				</select>
 				year old
 				<select id='inputGender'>
-					<option value='Male'>Man</option>
-					<option value='Female'>Woman</option>
-					<option value='Other'>Other</option>
+					<option value='male'>Man</option>
+					<option value='female'>Woman</option>
+					<option value='other'>Other</option>
 				</select>
 				 living in the
 				 <select id='inputRegion'>
-					 <option value='Midwest'>Midwest</option>
-					 <option value='West'>West</option>
-					 <option value='South'>South</option>
-					 <option value='Northeast'>Northeast</option>
+					 <option value='midwest'>Midwest</option>
+					 <option value='west'>West</option>
+					 <option value='south'>South</option>
+					 <option value='northeast'>Northeast</option>
 				 </select>.
-				 I identify as 
-				 <select id='inputRace'>
-					 <option value='white'>White</option>
-					 <option value='black'>Black</option>
-					 <option value='asian'>Asian</option>
-					 <option value='native_am'>Native American</option>
-					 <option value='hispanic'>Hispanic</option>
-					 <option value='multiracial'>Multiracial</option>
-				 </select> and my highest level of education is
+				 My highest level of education is
 				<select id='inputEdu'>
-					<option value='less_hs'>less than a high school degree</option>
-					<option value='high_school'>a high school degree</option>
+					<option value='high_school'>a high school degree or less</option>
 					<option value='some_college'>some college degree</option>
 					<option value='bachelor_up'>a bachelor's degree or higher</option>
 				</select>.</div>
@@ -237,37 +225,33 @@
 		var age = document.getElementById('inputAge')
 		var gender = document.getElementById('inputGender')
 		var region = document.getElementById('inputRegion')
-		var race = document.getElementById('inputRace')
 		var edu = document.getElementById('inputEdu')
 
 		var age_value = age.options[age.selectedIndex].value;
 		var gender_value = gender.options[gender.selectedIndex].value;
 		var region_value = region.options[region.selectedIndex].value;
-		var race_value = race.options[race.selectedIndex].value;
 		var edu_value = edu.options[edu.selectedIndex].value;
 
-		resetData(relationship_data, age_value, gender_value, region_value, race_value, edu_value)
+		resetData(relationship_data, age_value, gender_value, region_value, edu_value)
 
 		console.log(
 			 age_value,
 			 gender_value,
 			 region_value,
-			 race_value,
 			 edu_value
 		)
 
-        var filtered_data = filterData(age_value, gender_value, region_value, race_value, edu_value)
+        var filtered_data = filterData(age_value, gender_value, region_value,  edu_value)
 	}
 
-    function filterData(age_value, gender_value, region_value, race_value, edu_value){
+    function filterData(age_value, gender_value, region_value, edu_value){
         var temp_data = relationship_data
-                            .filter(function(d){return d['age'] == age_value})
-                            //.filter(function(d){return d.education == edu})
-                            //.filter(function(d){return d.gender == gender})
-                            //.filter(function(d){return d.race == race })
-                            //.filter(function(d){return d.region == region})
+            .filter(function(d) {return d.education == edu_value})
+            .filter(function(d) {return d.age_range == age_value})
+            .filter(function(d) {return d.gender == gender_value})
+            .filter(function(d) {return d.region == region_value})
         console.log("temp", temp_data)
-        return 0
+        return temp_data
 
         
     }
