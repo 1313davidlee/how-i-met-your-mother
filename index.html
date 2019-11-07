@@ -110,6 +110,7 @@
 	.introMaterial{
         border-radius: 6px;
         border: 1px solid black;
+        height: 140px;
 	}
 
     .toggleCat{
@@ -126,6 +127,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        border-bottom: 1px solid black;
     }
 
 
@@ -134,18 +136,33 @@
         justify-content: center;
         align-items: center;
         margin-bottom: 20px;
+        position: absolute;
+        background: white;
+        margin-left: 20px;
 
     }
+
+    #mainButton{
+        background: darkgray;
+    }
+
+
+    #comp{
+        
+        display: none;
+    }
+
+    
 </style>
 <body>
 	
         <div class='titleHeader'>How I Met Your Mother (or Father)</div>
         <div class='introMaterial'>
             <div class='toggleCat'>
-                <div class='toggleButton'>Main Set</div>
-                <div class='toggleButton'>Comparison Set</div>
+                <div id='mainButton' onclick='toggleSets("main")' style='border-right: 1px solid black' class='toggleButton'>Main Set</div>
+                <div id='compButton' onclick='toggleSets("comp")' class='toggleButton'>Comparison Set</div>
             </div>
-            <div class='inputText'>
+            <div id='main'  class='inputText'>
                 <div>I am a 
                     <select id='inputAge'>
                         <option value='millennial'>Millennial</option>
@@ -167,12 +184,56 @@
                         <option value='bachelor_up'>a bachelor's degree or higher</option>
                     </select>.</div>
             </div>
+
+            <div id='comp'  class='inputText'>
+                <div id='compText'>I am a 
+                    <select id='inputAgeComp'>
+                        <option value='millennial'>Millennial</option>
+                        <option value='gen_x'>Gen X</option>
+                        <option value='baby_boomer_up'>Baby Boomer or older</option>
+                    </select>
+                    
+                     living in the
+                     <select id='inputRegionComp'>
+                         <option value='midwest'>Midwest</option>
+                         <option value='west'>West</option>
+                         <option value='south'>South</option>
+                         <option value='northeast'>Northeast</option>
+                     </select>.
+                     My highest level of education is
+                    <select id='inputEduComp'>
+                        <option value='high_school'>a high school degree or less</option>
+                        <option value='some_college'>some college degree</option>
+                        <option value='bachelor_up'>a bachelor's degree or higher</option>
+                    </select>.</div>
+
+                    <form style='margin: 15px'>
+                            <label><input type="checkbox" name="dataset" id="checkboxComp" value="option1">Comparison Set Active</label>
+                    </form>
+            </div>
 			
 	    </div>
 	
-<form>
-    <label><input type="checkbox" name="dataset" id="dataset" value="option1">Comparison Set</label>
-</form>
+
+
+<script>
+    function toggleSets(set_name){
+
+        console.log("toggling sets")
+        if(set_name == 'main'){
+            document.getElementById('main').style.display = 'inherit'
+            document.getElementById('comp').style.display = 'none'
+            document.getElementById('mainButton').style.background = 'darkgray'
+            document.getElementById('compButton').style.background = 'lightgray'
+        }
+        else{
+            document.getElementById('main').style.display = 'none'
+            document.getElementById('comp').style.display = 'inherit'
+            document.getElementById('mainButton').style.background = 'lightgray'
+            document.getElementById('compButton').style.background = 'darkgray'
+        }
+    }
+</script>
 
 <script src="https://d3js.org/d3.v3.min.js"></script>
 <script>
@@ -221,9 +282,18 @@
         {label:"Category 5", value:12},
         {label:"Category 6", value:23}
     ];
-    d3.selectAll("input").on("change", addComparison);
+    d3.selectAll("input").on("change", hideCheck);
 
 	d3.selectAll("select").on("change", defineParams);
+
+    function hideCheck(){ //not currently working
+        if (document.getElementById('checkboxComp').checked == true){
+            console.log('running')
+            document.getElementById('compText').textDecoration == 'none'
+        }
+
+    }
+
 	function defineParams(){
 		var age = document.getElementById('inputAge')
 		var region = document.getElementById('inputRegion')
@@ -231,13 +301,35 @@
 		var age_value = age.options[age.selectedIndex].value;
 		var region_value = region.options[region.selectedIndex].value;
 		var edu_value = edu.options[edu.selectedIndex].value;
-		resetData(relationship_data, age_value, region_value, edu_value)
+		//resetData(relationship_data, age_value, region_value, edu_value)
+
+        var age_comp = document.getElementById('inputAgeComp')
+		var region_comp = document.getElementById('inputRegionComp')
+		var edu_comp = document.getElementById('inputEduComp')
+		var age_value_comp = age_comp.options[age_comp.selectedIndex].value;
+		var region_value_comp = region_comp.options[region_comp.selectedIndex].value;
+		var edu_value_comp = edu_comp.options[edu_comp.selectedIndex].value;
+		//resetData(relationship_data, age_value, region_value, edu_value)
 		console.log(
+            "main",
 			 age_value,
 			 region_value,
-			 edu_value
+			 edu_value,
+             "comp",
+             age_value_comp,
+			 region_value_comp,
+			 edu_value_comp,
+
 		)
-        var filtered_data = filterData(age_value,  region_value,  edu_value)
+
+        var filtered_main_data = filterData(age_value,  region_value,  edu_value)
+        if (document.getElementById('checkboxComp').checked == true){
+            console.log("checked")
+            var filtered_comp_data = filterData(age_value_comp,  region_value_comp,  edu_value_comp)
+        }
+
+
+
 	}
     function filterData(age_value,  region_value, edu_value){
         var temp_data = relationship_data
@@ -250,7 +342,7 @@
         
         change(transformed_data);
 
-        // return temp_data
+         //return temp_data
         
     }
 
