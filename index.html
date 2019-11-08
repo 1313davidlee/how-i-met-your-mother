@@ -6,6 +6,7 @@
         width: 960px;
         height: 500px;
         position: relative;
+        padding-left: 30px;
     }
     svg {
         width: 100%;
@@ -116,7 +117,7 @@
 	.introMaterial{
         border-radius: 6px;
         border: 1px solid black;
-        height: 140px;
+        height: 110px;
 	}
 
     .toggleCat{
@@ -163,6 +164,7 @@
 <body>
 	
         <div class='titleHeader'>How I Met Your Mother (or Father)</div>
+        <div style='margin-bottom: 20px; margin-top: 10px;'>David Lee and Charles Son</div>
         <div class='introMaterial'>
             <div class='toggleCat'>
                 <div id='mainButton' onclick='toggleSets("main")' style='border-right: 1px solid black' class='toggleButton'>Main Set</div>
@@ -213,12 +215,15 @@
                         <option value='bachelor_up'>a bachelor's degree or higher</option>
                     </select>.</div>
 
-                    <form style='margin: 15px'>
-                            <label><input type="checkbox" name="dataset" id="checkboxComp" value="unchecked">Comparison Set Active</label>
-                    </form>
+                    
             </div>
+            
 			
-	    </div>
+        </div>
+        
+        <form style='margin: 15px'>
+            <label><input type="checkbox" name="dataset" id="checkboxComp" value="unchecked">Comparison Set Active</label>
+    </form>
 	
 
 <script src="https://d3js.org/d3.v3.min.js"></script>
