@@ -1,418 +1,231 @@
 <!DOCTYPE html>
-<meta charset="utf-8">
-<style>
-    body {
-        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-        width: 960px;
-        height: 500px;
-        position: relative;
-        padding-left: 30px;
-    }
-    svg {
-        width: 100%;
-        height: 100%;
-        position: center;
-    }
-    path.slice{
-        stroke-width:2px;
-    }
-    text{
-        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    }
-    polyline{
-        opacity: .3;
-        stroke: black;
-        stroke-width: 2px;
-        fill: none;
-    }
-    .labelValue
-    {
-        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-        font-size: 60%;
-        opacity: .5;
-    }
-    label {
-        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-        font-weight: normal;
-    }
-    .toolTip {
-        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-        position: absolute;
-        display: none;
-        width: auto;
-        height: auto;
-        background: none repeat scroll 0 0 white;
-        border: 0 none;
-        border-radius: 8px 8px 8px 8px;
-        box-shadow: -3px 3px 15px #888888;
-        color: black;
-        font: 12px sans-serif;
-        padding: 5px;
-        text-align: center;
-    }
-    .legend {
-        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-        font-size: 60%;
-    }
-    rect {
-        stroke-width: 2;
-    }
-    text {
-        font: 10px sans-serif;
-    }
-    text.value{
-        font-size: 200%;
-        fill: white;
-    }
-    text.label{
-        font-size: 100%;
-    }
-    .axis text {
-        font: 10px sans-serif;
-    }
-    .axis path{
-        fill: none;
-        stroke: #000;
-    }
-    .axis line {
-        fill: none;
-        stroke: #000;
-        shape-rendering: crispEdges;
-    }
-    .axis .tick line {
-        stroke-width: 1;
-        stroke: rgba(0, 0, 0, 0.2);
-    }
-    .axisHorizontal path{
-        fill: none;
-    }
-    .axisHorizontal line {
-        fill: none;
-        stroke: #000;
-        shape-rendering: crispEdges;
-    }
-    .axisHorizontal .tick line {
-        stroke-width: 1;
-        stroke: rgba(0, 0, 0, 0.2);
-    }
-    .bar {
-        fill: #143d59;
-        fill-opacity: .9;
-        height: 20px;
-    }
-    .bar2 {
-        fill: #f4b41a;
-        fill-opacity: .9;
-        height: 10px;
-    }
-    .x.axis path {
-        display: none;
-    }
-	.titleHeader{
-		font-family: Arial, Helvetica, sans-serif;
-		font-size: 30px;
-		font-weight: 900;
-	}
-	
-	.introMaterial{
-        border-radius: 6px;
-        border: 1px solid black;
-        height: 110px;
-	}
 
-    .toggleCat{
-        height: 50px;
-        width: 100%;
-        background: lightgray;
-        margin-bottom: 20px;
-        display: flex;
-    }
+<head>
+    <title>How I Met Your Mother (or Father)</title>
 
-    .toggleButton{
-        width: 50%;
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        border-bottom: 1px solid black;
-        font-weight: 900;
-    }
+    <meta charset="utf-8">
+    <meta name="author" content="David Lee">
+    <meta name="author" content="Charles Son">
+    <meta name="description" content="This project visualizes ">
 
+    <script src="https://d3js.org/d3.v3.min.js"></script>
+    <script src="/index.js"></script>
 
-    .inputText{
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-bottom: 20px;
-        position: absolute;
-        background: white;
-        margin-left: 20px;
+    <link href='/styles.css' rel='stylesheet'>
 
-    }
+</head>
 
-    #mainButton{
-        background: darkgray;
-    }
-
-
-    #comp{
-        
-        display: none;
-    }
-
-    
-</style>
 <body>
+    <div class='visualParent'>
 	
-        <div class='titleHeader'>How I Met Your Mother (or Father)</div>
-        <div style='margin-bottom: 20px; margin-top: 10px;'>David Lee and Charles Son</div>
-        <div class='introMaterial'>
-            <div class='toggleCat'>
-                <div id='mainButton' onclick='toggleSets("main")' style='border-right: 1px solid black; color: #143d59' class='toggleButton'>Main Set</div>
-                <div id='compButton' onclick='toggleSets("comp")' class='toggleButton' style='color:#f4b41a;'>Comparison Set</div>
-            </div>
-            <div id='main'  class='inputText'>
-                <div>I am a 
-                    <select id='inputAge'>
-                        <option value='millennial'>Millennial</option>
-                        <option value='gen_x'>Gen X</option>
-                        <option value='baby_boomer_up'>Baby Boomer or older</option>
-                    </select>
-                    
-                     living in the
-                     <select id='inputRegion'>
-                         <option value='midwest'>Midwest</option>
-                         <option value='west'>West</option>
-                         <option value='south'>South</option>
-                         <option value='northeast'>Northeast</option>
-                     </select>.
-                     My highest level of education is
-                    <select id='inputEdu'>
-                        <option value='high_school'>a high school degree or less</option>
-                        <option value='some_college'>some college degree</option>
-                        <option value='bachelor_up'>a bachelor's degree or higher</option>
-                    </select>.</div>
-            </div>
-
-            <div id='comp'  class='inputText'>
-                <div><div id='compText' style="float: left; margin-right: 10px;">I am a </div>
-                    <select id='inputAgeComp'>
-                        <option value='millennial'>Millennial</option>
-                        <option value='gen_x'>Gen X</option>
-                        <option value='baby_boomer_up'>Baby Boomer or older</option>
-                    </select>
-                    
-                     living in the
-                     <select id='inputRegionComp'>
-                         <option value='midwest'>Midwest</option>
-                         <option value='west'>West</option>
-                         <option value='south'>South</option>
-                         <option value='northeast'>Northeast</option>
-                     </select>.
-                     My highest level of education is
-                    <select id='inputEduComp'>
-                        <option value='high_school'>a high school degree or less</option>
-                        <option value='some_college'>some college degree</option>
-                        <option value='bachelor_up'>a bachelor's degree or higher</option>
-                    </select>.</div>
-
-                    
-            </div>
-            
-			
+        <div class='titleHeader'>
+            <div>How I Met Your Mother (or Father):</div>
+            <div>Visualizing How Couples Meet</div>
         </div>
+        <div class='authorName'>DAVID LEE & CHARLES SON</div>
+
+        <div id='main'  class='chooseParameters'>
+                <div>I am a 
+                    <select class='dropdownMain' id='inputAge'>
+                        <option value='millennial'>Millennial</option>
+                        <option value='gen_x'>Gen X</option>
+                        <option value='baby_boomer_up'>Baby Boomer or older</option>
+                    </select>
+                    
+                     living in the
+                     <select class='dropdownMain' id='inputRegion'>
+                         <option value='midwest'>Midwest</option>
+                         <option value='west'>West</option>
+                         <option value='south'>South</option>
+                         <option value='northeast'>Northeast</option>
+                     </select>.
+                     My highest level of education is
+                    <select class='dropdownMain' id='inputEdu'>
+                        <option value='high_school'>a high school degree or less</option>
+                        <option value='some_college'>some college degree</option>
+                        <option value='bachelor_up'>a bachelor's degree or higher</option>
+                    </select>.</div>
+        </div>
+
+        <div id='comparisonText' class='comparedTo'>
+            Compared To
+        </div>
+
+        <div id='comparisonParameters' style='color: lightgray;' class='chooseParameters'>
+                <div>A
+                    <select class='dropdownComparison' id='inputAgeComp'>
+                        <option value='millennial'>Millennial</option>
+                        <option value='gen_x'>Gen X</option>
+                        <option value='baby_boomer_up'>Baby Boomer or older</option>
+                    </select>
+                    
+                     living in the
+                     <select class='dropdownComparison' id='inputRegionComp'>
+                         <option value='midwest'>Midwest</option>
+                         <option value='west'>West</option>
+                         <option value='south'>South</option>
+                         <option value='northeast'>Northeast</option>
+                     </select>.
+                     My highest level of education is
+                    <select class='dropdownComparison' id='inputEduComp'>
+                        <option value='high_school'>a high school degree or less</option>
+                        <option value='some_college'>some college degree</option>
+                        <option value='bachelor_up'>a bachelor's degree or higher</option>
+                    </select>.</div>
+
+                    
+            </div>
+
+
         
-        <form style='margin: 15px'>
-            <label><input type="checkbox" name="dataset" id="checkboxComp" value="unchecked">Comparison Set Active</label>
-    </form>
+        <form style='font-family: Georgia' >
+            <label><input type="checkbox" name="dataset" id="checkboxComp" value="unchecked">Comparison Set</label>
+        </form>
+
+        <div class='graphContainer'>
+
+            
+
+        </div>
+
+    </div>
 	
+    <script>
+        d3.selectAll("input").on("change", handleChecked);
+        d3.selectAll("select").on("change", defineParams);
 
-<script src="https://d3js.org/d3.v3.min.js"></script>
-<script>
-    function toggleSets(set_name){
-
-        console.log("toggling sets")
-        if(set_name == 'main'){
-            document.getElementById('main').style.display = 'inherit'
-            document.getElementById('comp').style.display = 'none'
-            document.getElementById('mainButton').style.background = 'darkgray'
-            document.getElementById('compButton').style.background = 'lightgray'
-        }
-        else{
-            document.getElementById('main').style.display = 'none'
-            document.getElementById('comp').style.display = 'inherit'
-            document.getElementById('mainButton').style.background = 'lightgray'
-            document.getElementById('compButton').style.background = 'darkgray'
-            document.getElementById('compText').innerHTML = 'Compared to';
-        }
-    }
-
-	var relationship_data;
-    var init_data
-    d3.csv("./relationship_data_clean.csv", function(data){
-        relationship_data = data;
         
-        // console.log(relationship_data)
-        init_data = data 
-        var init = init_data
-            .filter(function(d) {return d.education == "high_school"})
-            .filter(function(d) {return d.age_range == "millennial"})
-            .filter(function(d) {return d.region == "midwest"})
-        console.log("TEMP", init)
+        var relationship_data;
+        var init_data
+
+        //load data and initialize to default values
+        d3.csv("./relationship_data_clean.csv", function(data){
+            relationship_data = data;
+
+            init_data = data 
+            var init = init_data
+                .filter(function(d) {return d.education == "high_school"})
+                .filter(function(d) {return d.age_range == "millennial"})
+                .filter(function(d) {return d.region == "midwest"})
+
+            renderBars(transformDatasetPercentage(init), 'main');
+        });
+
+        //default data for 
+        defaultZeros = [
+            {label:"Other", value:0, percent:0},
+            {label:"Internet or App", value:0, percent:0},
+            {label:"Blind Date", value:0, percent:0},
+            {label:"Work", value:0, percent:0},
+            {label:"Friend", value:0, percent:0},
+            {label:"Family", value:0, percent:0},
+            {label:"Neighbor", value:0, percent:0},
+            {label:"School", value:0, percent:0},
+            {label:"Church", value:0, percent:0},
+            {label:"Volunteering", value:0, percent:0},
+            {label:"Social Event or Bar", value:0, percent:0},
+            {label:"Stranger", value:0, percent:0},
+        ];
+
+
+        var age = document.getElementById('inputAge');
+        var region = document.getElementById('inputRegion');
+        var edu = document.getElementById('inputEdu');
+        var age_value = age.options[age.selectedIndex].value;
+        var region_value = region.options[region.selectedIndex].value;
+        var edu_value = edu.options[edu.selectedIndex].value;
+
+        var age_comp = document.getElementById('inputAgeComp');
+        var region_comp = document.getElementById('inputRegionComp');
+        var edu_comp = document.getElementById('inputEduComp');
+        var age_value_comp = age_comp.options[age_comp.selectedIndex].value;
+        var region_value_comp = region_comp.options[region_comp.selectedIndex].value;
+        var edu_value_comp = edu_comp.options[edu_comp.selectedIndex].value;
+
+        function handleChecked() {
         
-        change(transformDatasetPercentage(init));
-        // change2(transformDatasetPercentage(init))
-    });
-    defaultZeros = [
-		{label:"Other", value:0, percent:0},
-		{label:"Internet or App", value:0, percent:0},
-		{label:"Blind Date", value:0, percent:0},
-        {label:"Work", value:0, percent:0},
-        {label:"Friend", value:0, percent:0},
-        {label:"Family", value:0, percent:0},
-        {label:"Neighbor", value:0, percent:0},
-        {label:"School", value:0, percent:0},
-        {label:"Church", value:0, percent:0},
-		{label:"Volunteering", value:0, percent:0},
-        {label:"Social Event or Bar", value:0, percent:0},
-        {label:"Stranger", value:0, percent:0},
-    ];
-
-
-    var age = document.getElementById('inputAge');
-	var region = document.getElementById('inputRegion');
-	var edu = document.getElementById('inputEdu');
-	var age_value = age.options[age.selectedIndex].value;
-	var region_value = region.options[region.selectedIndex].value;
-	var edu_value = edu.options[edu.selectedIndex].value;
-
-    var age_comp = document.getElementById('inputAgeComp');
-	var region_comp = document.getElementById('inputRegionComp');
-	var edu_comp = document.getElementById('inputEduComp');
-	var age_value_comp = age_comp.options[age_comp.selectedIndex].value;
-	var region_value_comp = region_comp.options[region_comp.selectedIndex].value;
-	var edu_value_comp = edu_comp.options[edu_comp.selectedIndex].value;
-
-
-
-
-    d3.selectAll("input").on("change", handleChecked);
-
-	d3.selectAll("select").on("change", defineParams);
-
-    // function hideCheck(){ //not currently working
-    //     // if (document.getElementById('checkboxComp').checked == true){
-    //     //     console.log('running')
-    //     //     document.getElementById('compText').textDecoration == 'none'
-    //     // }
-    // }
-
-    function handleChecked() {
-            // console.log("Now displaying comparison data");
             if (document.getElementById('checkboxComp').checked == true) {
-                console.log('Loading comparison data');
-                console.log(
-                    "main:",
-                    age_value,
-                    region_value,
-                    edu_value,
-                    "&comp:",
-                    age_value_comp,
-                    region_value_comp,
-                    edu_value_comp,
-                    );
-                console.log('filterdata1 running');
-                filterData1(age_value, region_value, edu_value);
-                console.log('filterdata2 running');
-                filterData2(age_value_comp, region_value_comp, edu_value_comp);
+
+                document.getElementById('comparisonParameters').style.color = 'black'
+                document.getElementById('inputRegionComp').style.background = '#9a2617'
+                document.getElementById('inputAgeComp').style.background = '#9a2617'
+                document.getElementById('inputEduComp').style.background = '#9a2617'
+                //document.getElementById('comparisonText').style.display = ''              
+                filterData(age_value, region_value, edu_value, "main");
+                filterData(age_value_comp, region_value_comp, edu_value_comp, "comparison");
             }
             else { // Display only the main data
-                console.log('Loading main data');
-                console.log(
-            "main:",
-			 age_value,
-			 region_value,
-			 edu_value,
-             "&comp:",
-             age_value_comp,
-			 region_value_comp,
-			 edu_value_comp,
-		);
-                change2(defaultZeros);
-                filterData1(age_value, region_value, edu_value);
+
+                document.getElementById('comparisonParameters').style.color = 'lightgray'
+                document.getElementById('inputRegionComp').style.background = '#ab8480'
+                document.getElementById('inputAgeComp').style.background = '#ab8480'
+                document.getElementById('inputEduComp').style.background = '#ab8480'
+                //document.getElementById('comparisonText').style = 'none'
+                
+                //set comparison bars to zero
+                renderBars(defaultZeros, "comparison")
+                filterData(age_value, region_value, edu_value, "main");
             }
         }
 
-	function defineParams(){
-		age = document.getElementById('inputAge');
-		region = document.getElementById('inputRegion');
-		edu = document.getElementById('inputEdu');
-		age_value = age.options[age.selectedIndex].value;
-		region_value = region.options[region.selectedIndex].value;
-		edu_value = edu.options[edu.selectedIndex].value;
-
-        age_comp = document.getElementById('inputAgeComp');
-		region_comp = document.getElementById('inputRegionComp');
-		edu_comp = document.getElementById('inputEduComp');
-		age_value_comp = age_comp.options[age_comp.selectedIndex].value;
-		region_value_comp = region_comp.options[region_comp.selectedIndex].value;
-		edu_value_comp = edu_comp.options[edu_comp.selectedIndex].value;
-
-        var filtered_main_data = filterData1(age_value, region_value, edu_value);
-
-
-
-
-        if (document.getElementById('checkboxComp').checked == true){
-            console.log("Now displaying comparison data")
+        function defineParams(){
             age = document.getElementById('inputAge');
             region = document.getElementById('inputRegion');
             edu = document.getElementById('inputEdu');
+
             age_value = age.options[age.selectedIndex].value;
             region_value = region.options[region.selectedIndex].value;
             edu_value = edu.options[edu.selectedIndex].value;
 
-            console.log(age_value, region_value, edu_value);
+            //load comparison parameters and 
+            age_comp = document.getElementById('inputAgeComp');
+            region_comp = document.getElementById('inputRegionComp');
+            edu_comp = document.getElementById('inputEduComp');
+            age_value_comp = age_comp.options[age_comp.selectedIndex].value;
+            region_value_comp = region_comp.options[region_comp.selectedIndex].value;
+            edu_value_comp = edu_comp.options[edu_comp.selectedIndex].value;
+
+            var filtered_main_data = filterData(age_value, region_value, edu_value, "main");
 
 
-            filterData2(age_value_comp,  region_value_comp,  edu_value_comp);
 
 
-            filterData1(age_value,  region_value,  edu_value);
+            if (document.getElementById('checkboxComp').checked == true){
+                age = document.getElementById('inputAge');
+                region = document.getElementById('inputRegion');
+                edu = document.getElementById('inputEdu');
+                age_value = age.options[age.selectedIndex].value;
+                region_value = region.options[region.selectedIndex].value;
+                edu_value = edu.options[edu.selectedIndex].value;
+
+
+
+                filterData(age_value_comp,  region_value_comp,  edu_value_comp, "comparison");
+
+
+                filterData(age_value,  region_value,  edu_value, "main");
+            }
+            else {
+            }
         }
-        else {
-            console.log("Now displaying original data");
+
+        function filterData(age_value,  region_value, edu_value, which_set){
+            
+
+            var temp_data = relationship_data
+                .filter(function(d) {return d.education == edu_value})
+                .filter(function(d) {return d.age_range == age_value})
+                .filter(function(d) {return d.region == region_value})
+
+            var transformed_data = transformDatasetPercentage(temp_data);
+
+            renderBars(transformed_data, which_set);
+            //return temp_data
         }
-	}
 
-    function filterData1(age_value,  region_value, edu_value){
-        var temp_data = relationship_data
-            .filter(function(d) {return d.education == edu_value})
-            .filter(function(d) {return d.age_range == age_value})
-            .filter(function(d) {return d.region == region_value})
-        // console.log(temp_data.length);
-
-        var transformed_data = transformDatasetPercentage(temp_data);
         
-        change(transformed_data);
-         //return temp_data
-    }
 
-    function filterData2(age_value,  region_value, edu_value){
-        var temp_data = relationship_data
-            .filter(function(d) {return d.education == edu_value})
-            .filter(function(d) {return d.age_range == age_value})
-            .filter(function(d) {return d.region == region_value})
-        // console.log(temp_data.length);
-
-        var transformed_data = transformDatasetPercentage(temp_data);
-        
-        
-        change2(transformed_data);
-         //return temp_data
-    }
-
-    function transformDataset(temp_data) {
+        function transformDataset(temp_data) {
         var work_num = 0;
         var volunteering_num = 0;
         var blind_date_num = 0;
@@ -425,7 +238,7 @@
         var school_num = 0;
         var social_event_num = 0;
         var stranger_num = 0;
-        
+
         for (var i = 0; i < temp_data.length; i++) {
             var eachRow = temp_data[i];
 
@@ -444,167 +257,142 @@
         }
 
         var newDataInput = [
-		{label:"Other", value: other_num},
-		{label:"Internet or App", value: internet_num},
-		{label:"Blind Date", value: blind_date_num},
+        {label:"Other", value: other_num},
+        {label:"Internet or App", value: internet_num},
+        {label:"Blind Date", value: blind_date_num},
         {label:"Work", value: work_num},
         {label:"Friend", value: friend_num},
         {label:"Family", value: family_num},
         {label:"Neighbor", value: neighbor_num},
         {label:"School", value: school_num},
         {label:"Church", value: church_num},
-		{label:"Volunteering", value: volunteering_num},
+        {label:"Volunteering", value: volunteering_num},
         {label:"Social Event or Bar", value: social_event_num},
         {label:"Stranger", value: stranger_num},
         ];
 
         return newDataInput;
-    }
-
-    function transformDatasetPercentage(temp_data) {
-        var work_num = 0;
-        var volunteering_num = 0;
-        var blind_date_num = 0;
-        var church_num = 0;
-        var family_num = 0;
-        var friend_num = 0;
-        var internet_num = 0;
-        var neighbor_num = 0;
-        var other_num = 0;
-        var school_num = 0;
-        var social_event_num = 0;
-        var stranger_num = 0;
-        var totalcount = 0;
-        
-        for (var i = 0; i < temp_data.length; i++) {
-            var eachRow = temp_data[i];
-
-            work_num += parseInt(eachRow.work);
-            volunteering_num += parseInt(eachRow.volunteering);
-            blind_date_num += parseInt(eachRow.blind_date);
-            church_num += parseInt(eachRow.church);
-            family_num += parseInt(eachRow.family);
-            friend_num += parseInt(eachRow.friend);
-            internet_num += parseInt(eachRow.internet);
-            neighbor_num += parseInt(eachRow.neighbor);
-            other_num += parseInt(eachRow.other);
-            school_num += parseInt(eachRow.school);
-            social_event_num += parseInt(eachRow.social_event_bar);
-            stranger_num += parseInt(eachRow.stranger);
         }
 
-        var totalcount = work_num + volunteering_num + blind_date_num + church_num + family_num + friend_num + internet_num + neighbor_num + other_num + school_num + social_event_num + stranger_num;
+        function transformDatasetPercentage(temp_data) {
+            var work_num = 0;
+            var volunteering_num = 0;
+            var blind_date_num = 0;
+            var church_num = 0;
+            var family_num = 0;
+            var friend_num = 0;
+            var internet_num = 0;
+            var neighbor_num = 0;
+            var other_num = 0;
+            var school_num = 0;
+            var social_event_num = 0;
+            var stranger_num = 0;
+            var totalcount = 0;
 
-        var newDataInput = [
-		{label:"Other", value: other_num, percent: other_num / totalcount},
-		{label:"Internet or App", value: internet_num, percent: internet_num / totalcount},
-		{label:"Blind Date", value: blind_date_num, percent: blind_date_num / totalcount},
-        {label:"Work", value: work_num, percent: work_num / totalcount},
-        {label:"Friend", value: friend_num, percent: friend_num / totalcount},
-        {label:"Family", value: family_num, percent: family_num / totalcount},
-        {label:"Neighbor", value: neighbor_num, percent: neighbor_num / totalcount},
-        {label:"School", value: school_num, percent: school_num / totalcount},
-        {label:"Church", value: church_num, percent: church_num / totalcount},
-		{label:"Volunteering", value: volunteering_num, percent: volunteering_num / totalcount},
-        {label:"Social Event or Bar", value: social_event_num, percent: social_event_num / totalcount},
-        {label:"Stranger", value: stranger_num, percent: stranger_num / totalcount},
-        ];
+            for (var i = 0; i < temp_data.length; i++) {
+                var eachRow = temp_data[i];
 
-        return newDataInput;
-    }
+                work_num += parseInt(eachRow.work);
+                volunteering_num += parseInt(eachRow.volunteering);
+                blind_date_num += parseInt(eachRow.blind_date);
+                church_num += parseInt(eachRow.church);
+                family_num += parseInt(eachRow.family);
+                friend_num += parseInt(eachRow.friend);
+                internet_num += parseInt(eachRow.internet);
+                neighbor_num += parseInt(eachRow.neighbor);
+                other_num += parseInt(eachRow.other);
+                school_num += parseInt(eachRow.school);
+                social_event_num += parseInt(eachRow.social_event_bar);
+                stranger_num += parseInt(eachRow.stranger);
+            }
 
+            var totalcount = work_num + volunteering_num + blind_date_num + church_num + family_num + friend_num + internet_num + neighbor_num + other_num + school_num + social_event_num + stranger_num;
 
+            var newDataInput = [
+                {label:"Other", value: other_num, percent: other_num / totalcount},
+                {label:"Internet or App", value: internet_num, percent: internet_num / totalcount},
+                {label:"Blind Date", value: blind_date_num, percent: blind_date_num / totalcount},
+                {label:"Work", value: work_num, percent: work_num / totalcount},
+                {label:"Friend", value: friend_num, percent: friend_num / totalcount},
+                {label:"Family", value: family_num, percent: family_num / totalcount},
+                {label:"Neighbor", value: neighbor_num, percent: neighbor_num / totalcount},
+                {label:"School", value: school_num, percent: school_num / totalcount},
+                {label:"Church", value: church_num, percent: church_num / totalcount},
+                {label:"Volunteering", value: volunteering_num, percent: volunteering_num / totalcount},
+                {label:"Social Event or Bar", value: social_event_num, percent: social_event_num / totalcount},
+                {label:"Stranger", value: stranger_num, percent: stranger_num / totalcount},
+            ];
 
-    function addComparison(dataset)
-    {
-        y.domain(dataset.map(function(d) { return d.label; }));
-        x.domain([0, 0.5]);
+            return newDataInput;
+
+        }
+
+        var margin = {top: (parseInt(d3.select('div.graphContainer').style('height'), 10)/20 - 20), right: (parseInt(d3.select('div.graphContainer').style('width'), 10)/20), bottom: (parseInt(d3.select('div.graphContainer').style('height'), 10)/20), left: (parseInt(d3.select('div.graphContainer').style('width'), 10)/5)},
+                width = 600//parseInt(d3.select('div.graphContainer').style('width'), 10) - margin.left - margin.right,
+                height = parseInt(d3.select('div.graphContainer').style('height'), 10) - margin.top - margin.bottom;
+        var div = d3.select("div.graphContainer")
+                    .append("div")
+                    .attr("class", "toolTip");
+        var formatPercent = d3.format("");
+
+        var y = d3.scale.ordinal()
+                        .rangeRoundBands([height, 0], .2, 0.5);
+
+        var x = d3.scale.linear()
+                        .range([0, width]);
+
+        var xAxis = d3.svg.axis()
+                            .scale(x)
+                            .tickSize(-height)
+                            .orient("bottom");
+
+        
+                            
+        var yAxis = d3.svg.axis()
+                            .scale(y)
+                            .orient("left");
+
+        var svg = d3.select("div.graphContainer").append("svg")
+                                    .attr("width", width + margin.left + margin.right)
+                                    .attr("height", height + margin.top + margin.bottom)
+                                    .append("g")
+                                    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
         svg.append("g")
-                .attr("class", "x axis")
-                .attr("transform", "translate(0," + height + ")")
-                .call(xAxis);
-        svg.select(".y.axis").remove();
-        svg.select(".x.axis").remove();
-        svg.append("g")
-                .attr("class", "y axis")
-                .call(yAxis)
-                .append("text")
-                .attr("transform", "rotate(0)")
-                .attr("x", 50)
-                .attr("dx", ".1em")
-                .style("text-anchor", "end")
-                // .text("Option %");
-        var bar = svg.selectAll(".bar")
-                .data(dataset, function(d) { return d.label; });
-        // new data:
-        bar.enter().append("rect")
-                .attr("class", "bar")
-                .attr("x", function(d) { return x(d.value); })
-                .attr("y", function(d) { return y(d.label); })
-                .attr("width", function(d) { return width-x(d.percent); })
-                .attr("height", y.rangeBand());
-        bar
-                .on("mouseenter", function(d){
-                    div.style("left", d3.event.pageX+10+"px");
-                    div.style("top", d3.event.pageY-25+"px");
-                    div.style("display", "inline-block");
-                    div.html((d.label)+"<br>"+(d.value) + " people"); // +"<br>" + (d.percent.toFixed(2)) + "%"
-                });
-        bar
-                .on("mouseleave", function(d){
-                    div.style("display", "none");
-                });
-        // removed data:
-        bar.exit().remove();
-        // updated data:
-        bar.transition()
-                .duration(750)
-                .attr("x", function(d) { return 0; })
-                .attr("y", function(d) { return y(d.label); })
-                .attr("width", function(d) { return x(d.percent); })
-                .attr("height", y.rangeBand());
-    }
-    var margin = {top: (parseInt(d3.select('body').style('height'), 10)/20), right: (parseInt(d3.select('body').style('width'), 10)/20), bottom: (parseInt(d3.select('body').style('height'), 10)/20), left: (parseInt(d3.select('body').style('width'), 10)/5)},
-            width = parseInt(d3.select('body').style('width'), 10) - margin.left - margin.right,
-            height = parseInt(d3.select('body').style('height'), 10) - margin.top - margin.bottom;
-    var div = d3.select("body").append("div").attr("class", "toolTip");
-    var formatPercent = d3.format("");
-    var y = d3.scale.ordinal()
-            .rangeRoundBands([height, 0], .2, 0.5);
-    var x = d3.scale.linear()
-            .range([0, width]);
-    var xAxis = d3.svg.axis()
-            .scale(x)
-            .tickSize(-height)
-            .orient("bottom");
-    var yAxis = d3.svg.axis()
-            .scale(y)
-            .orient("left");
-    //.tickFormat(formatPercent);
-    var svg = d3.select("body").append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
-            .append("g")
-            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-    svg.append("g")
             .attr("class", "x axis")
             .attr("transform", "translate(0," + height + ")")
             .call(xAxis);
-    d3.select("input[value=\"total\"]").property("checked", true);
 
-    change(defaultZeros);
-    // change2(defaultZeros);
+        d3.select("input[value=\"total\"]").property("checked", true);
+        
+        //renderBars(defaultZeros, 'main');
 
-    function change(dataset) {
-        y.domain(dataset.map(function(d) { return d.label; }));
-        x.domain([0, 0.5]);
-        svg.append("g")
+
+        function renderBars(dataset, tag) {
+
+            //differentiate between main and comparison sets
+            var curr_svg = null
+            var curr_class = null
+            var offset = null
+            if(tag == 'main'){
+                curr_svg = ".bar"
+                curr_class = "bar"
+                offset = 0
+            }
+            else{
+                curr_svg = ".bar2"
+                curr_class = "bar2"
+                offset = 20
+            }
+            
+            y.domain(dataset.map(function(d) { return d.label; }));
+            x.domain([0, 0.5]);
+            svg.append("g")
                 .attr("class", "x axis")
                 .attr("transform", "translate(0," + height + ")")
                 .call(xAxis);
-        svg.select(".y.axis").remove();
-        svg.select(".x.axis").remove();
-        svg.append("g")
+            svg.select(".y.axis").remove();
+            svg.select(".x.axis").remove();
+            svg.append("g")
                 .attr("class", "y axis")
                 .call(yAxis)
                 .append("text")
@@ -612,88 +400,43 @@
                 .attr("x", 50)
                 .attr("dx", ".1em")
                 .style("text-anchor", "end")
-                // .text("Option %");
-        var bar = svg.selectAll(".bar")
-                .data(dataset, function(d) { return d.label; });
-        // new data:
-        bar.enter().append("rect")
-                .attr("class", "bar")
-                .attr("x", function(d) { return x(d.value); })
-                .attr("y", function(d) { return y(d.label); })
-                .attr("width", function(d) { return width-x(d.percent); })
-                .attr("height", y.rangeBand());
-        bar
-                .on("mouseenter", function(d){
-                    div.style("left", d3.event.pageX+10+"px");
-                    div.style("top", d3.event.pageY-25+"px");
-                    div.style("display", "inline-block");
-                    div.html((d.label)+"<br>"+(d.value) + " people"); // +"<br>" + (d.percent.toFixed(2)) + "%"
-                });
-        bar
-                .on("mouseleave", function(d){
-                    div.style("display", "none");
-                });
-        // removed data:
-        bar.exit().remove();
-        // updated data:
-        bar.transition()
-                .duration(750)
-                .attr("x", function(d) { return 0; })
-                .attr("y", function(d) { return y(d.label); })
-                .attr("width", function(d) { return x(d.percent); })
-                .attr("height", y.rangeBand());
-    };
 
-    function change2(dataset) {
-        y.domain(dataset.map(function(d) { return d.label; }));
-        x.domain([0, 0.5]);
-        svg.append("g")
-                .attr("class", "x axis")
-                .attr("transform", "translate(0," + height + ")")
-                .call(xAxis);
-        svg.select(".y.axis").remove();
-        svg.select(".x.axis").remove();
-        svg.append("g")
-                .attr("class", "y axis")
-                .call(yAxis)
-                .append("text")
-                .attr("transform", "rotate(0)")
-                .attr("x", 50)
-                .attr("dx", ".1em")
-                .style("text-anchor", "end")
-                // .text("Option %");
-        var bar2 = svg.selectAll(".bar2")
-                .data(dataset, function(d) { return d.label; });
-        // new data:
-        bar2.enter().append("rect")
-                .attr("class", "bar2")
-                .attr("x", function(d) { return x(d.value); })
-                .attr("y", function(d) { return y(d.label) + 19; })
-                .attr("width", function(d) { return width-x(d.percent); })
-                .attr("height", y.rangeBand());
-        bar2
-                .on("mouseenter", function(d){
-                    div.style("left", d3.event.pageX+10+"px");
-                    div.style("top", d3.event.pageY-25+"px");
-                    div.style("display", "inline-block");
-                    div.html((d.label)+"<br>"+(d.value) + " people"); // +"<br>" + (d.percent.toFixed(2)) + "%"
-                });
-        bar2
-                .on("mouseleave", function(d){
-                    div.style("display", "none");
-                });
-        // removed data:
-        bar2.exit().remove();
-        // updated data:
-        bar2.transition()
-                .duration(750)
-                .attr("x", function(d) { return 0; })
-                .attr("y", function(d) { return y(d.label) + 19; })
-                .attr("width", function(d) { return x(d.percent); })
-                .attr("height", y.rangeBand());
-    };
+            var bar = svg.selectAll(curr_svg)
+                        .data(dataset, function(d) { return d.label; });
 
-    
-    
+            // new data:
+            bar.enter().append("rect")
+                        .attr("class", curr_class)
+                        .attr("x", function(d) { return x(d.value); })
+                        .attr("y", function(d) { return y(d.label) + offset })
+                        .attr("width", function(d) { return width-x(d.percent); })
+                        .attr("height", y.rangeBand());
+
+            bar.on("mouseenter", function(d){
+                div.style("left", d3.event.pageX+10+"px");
+                div.style("top", d3.event.pageY-25+"px");
+                div.style("display", "inline-block");
+                div.html((d.label)+"<br>"+(d.value) + " people"); 
+            });
+
+            bar.on("mouseleave", function(d){
+                div.style("display", "none");
+            });
+
+            // remove data:
+            bar.exit().remove();
+
+            bar.transition()
+                    .duration(750)
+                    .attr("x", function(d) { return 0; })
+                    .attr("y", function(d) { return y(d.label) + offset; })
+                    .attr("width", function(d) { return x(d.percent); })
+                    .attr("height", y.rangeBand());
+        };
+
+        
 </script>
+<div class='bottomInfo'>Percent of total responses</div>
+    <div class='sourceInfo'>Source: <a href='https://data.stanford.edu/hcmst2017'>Stanford University Social Science Data Collection</a></div>
+
 </body>
